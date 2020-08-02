@@ -91,5 +91,5 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/id", IDHandler)
-	log.Fatal(http.ListenAndServe("localhost" + port, r))
+	log.Fatal(http.ListenAndServe(":" + port, r))
 }
