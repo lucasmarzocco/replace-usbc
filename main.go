@@ -5,6 +5,7 @@ import (
 	"log"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 )
@@ -82,7 +83,13 @@ func TournamentHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func main() {
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+	}
+
 	r := mux.NewRouter()
 	r.HandleFunc("/id", IDHandler)
-	log.Fatal(http.ListenAndServe("localhost:8080", r))
+	log.Fatal(http.ListenAndServe("localhost" + port, r))
 }
