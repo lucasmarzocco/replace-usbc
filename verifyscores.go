@@ -30,11 +30,12 @@ func query(url string, r *http.Request) []byte {
 	s := r.URL.Query()
 	prefix := s["prefix"][0]
 	suffix := s["suffix"][0]
+	size := s["size"][0]
 
 	q := req.URL.Query()
 	q.Add("prefix", prefix)
 	q.Add("suffix", suffix)
-	q.Add("size", string(1000))
+	q.Add("size", size)
 	req.URL.RawQuery = q.Encode()
 
 	data, err := http.Get(req.URL.String())
