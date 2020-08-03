@@ -84,6 +84,9 @@ func TournamentHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(body)
 }
 
+func UsageHandler(w http.ResponseWriter, r *http.Request) {
+}
+
 func main() {
 
 	port := os.Getenv("PORT")
@@ -92,6 +95,7 @@ func main() {
 	}
 
 	r := mux.NewRouter()
+	r.Handle("/", UsageHandler)
 	r.HandleFunc("/id", IDHandler)
 	r.HandleFunc("/averages", AverageHandler)
 	r.HandleFunc("/rerates", RerateHandler)
