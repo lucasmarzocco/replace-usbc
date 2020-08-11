@@ -459,16 +459,18 @@ func main() {
 		port = "8000"
 	}
 
+	prefix := "/api/v1"
+
 	r := mux.NewRouter()
 	r.HandleFunc("/", UsageHandler)
-	r.HandleFunc("/usbc/id", IDHandler)
-	r.HandleFunc("/usbc/averages", AverageHandler)
-	r.HandleFunc("/usbc/rerates", RerateHandler)
-	r.HandleFunc("/usbc/leagues", LeagueHandler)
-	r.HandleFunc("/usbc/memberships", MembershipHandler)
-	r.HandleFunc("/usbc/achievements", AchievementHandler)
-	r.HandleFunc("/usbc/tournaments", TournamentHandler)
-	r.HandleFunc("/igbo/id", IGBOIDHandler)
-	r.HandleFunc("/igbo/averages", IGBOHandler)
+	r.HandleFunc(prefix+ "/usbc/id", IDHandler)
+	r.HandleFunc(prefix + "/usbc/averages", AverageHandler)
+	r.HandleFunc(prefix + "/usbc/rerates", RerateHandler)
+	r.HandleFunc(prefix + "/usbc/leagues", LeagueHandler)
+	r.HandleFunc(prefix + "/usbc/memberships", MembershipHandler)
+	r.HandleFunc(prefix + "/usbc/achievements", AchievementHandler)
+	r.HandleFunc(prefix + "/usbc/tournaments", TournamentHandler)
+	r.HandleFunc(prefix + "/igbo/id", IGBOIDHandler)
+	r.HandleFunc(prefix + "/igbo/averages", IGBOHandler)
 	log.Fatal(http.ListenAndServe(":" + port, r))
 }
