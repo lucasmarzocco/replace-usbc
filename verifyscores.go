@@ -8,22 +8,22 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 var (
-	USBC_SITE    = "http://webservices.bowl.com"
-	IGBO_SITE    = "http://old.igbo.org/"
-	ID           = "/USBC.Search.Services/api/v1/members/id"
-	AVERAGES     = "/USBC.Search.Services/api/v1/compositeaverages"
-	RERATE       = "/USBC.Search.Services/api/v1/reratedaverage"
-	LEAGUES      = "/USBC.Search.Services/api/v1/leagueactivities"
-	MEMBERSHIPS  = "/USBC.Search.Services/api/v1/memberships"
-	ACHIEVEMENTS = "/USBC.Search.Services/api/v1/achievements"
-	TOURNAMENTS  = "/USBC.Search.Services/api/v1/tournamentaverages"
-	IGBO_AVERAGES= "/tournaments/get-igbo-tournament-tad-average/"
-	IGBO_ID      = "/tournaments/igbots-id-lookup/"
+	USBC_SITE     = "http://webservices.bowl.com"
+	IGBO_SITE     = "http://old.igbo.org/"
+	ID            = "/USBC.Search.Services/api/v1/members/id"
+	AVERAGES      = "/USBC.Search.Services/api/v1/compositeaverages"
+	RERATE        = "/USBC.Search.Services/api/v1/reratedaverage"
+	LEAGUES       = "/USBC.Search.Services/api/v1/leagueactivities"
+	MEMBERSHIPS   = "/USBC.Search.Services/api/v1/memberships"
+	ACHIEVEMENTS  = "/USBC.Search.Services/api/v1/achievements"
+	TOURNAMENTS   = "/USBC.Search.Services/api/v1/tournamentaverages"
+	IGBO_AVERAGES = "/tournaments/get-igbo-tournament-tad-average/"
+	IGBO_ID       = "/tournaments/igbots-id-lookup/"
 )
 
 type IGBO struct {
@@ -44,12 +44,12 @@ type Bowler struct {
 }
 
 type Event struct {
-	Date          string
-	Tournament    string
-	Type          string
-	Series        int
-	Games         int
-	Average       int
+	Date       string
+	Tournament string
+	Type       string
+	Series     int
+	Games      int
+	Average    int
 }
 
 func UsageHandler(w http.ResponseWriter, r *http.Request) {
@@ -66,7 +66,7 @@ func UsageHandler(w http.ResponseWriter, r *http.Request) {
 		"/igbo/averages":     "Get IGBO averages: pass in id/yearrange",
 	}
 
-	d, _ := json.Marshal(data)
+	d, _ := json.MarshalIndent(data, "", "    ")
 	w.Write(d)
 }
 
@@ -206,14 +206,14 @@ func IGBOIDHandler(w http.ResponseWriter, r *http.Request) {
 				if counter == 3 {
 					if data == "td" {
 						igbo.City = ""
-					}else {
+					} else {
 						igbo.City = data
 					}
 				}
 				if counter == 4 {
 					if data == "td" {
 						igbo.USBC = ""
-					}else {
+					} else {
 						igbo.USBC = data
 					}
 
@@ -237,12 +237,12 @@ func IGBOIDHandler(w http.ResponseWriter, r *http.Request) {
 				if name == val.Name {
 					if val.USBC != "" {
 						if val.USBC == usbc {
-				 			w.Header().Set("Content-Type", "application/json")
+							w.Header().Set("Content-Type", "application/json")
 							d, _ := json.Marshal(val.ID)
 							w.Write(d)
 							return
 						}
-					}else {
+					} else {
 						w.Header().Set("Content-Type", "application/json")
 						d, _ := json.Marshal(val.ID)
 						w.Write(d)
@@ -304,33 +304,33 @@ func IGBOHandler(w http.ResponseWriter, r *http.Request) {
 						data = tokens.Token().Data
 						if count < 3 {
 							count += 1
-						}else {
+						} else {
 							if data == "strong" {
 								tokens.Next()
 								data = tokens.Token().Data
 							}
 							if place == 0 {
 								bowler.TotalPins = data
-							}else if place == 1 {
+							} else if place == 1 {
 								bowler.TotalGames = data
-							}else if place == 2 {
+							} else if place == 2 {
 								bowler.Average = data
 							}
 							place += 1
 							count += 1
 						}
-					}else {
+					} else {
 
 						tokens.Next()
 						data = tokens.Token().Data
 
 						if place == 0 {
 							bowler.IGBO = data
-						}else if place == 1 {
+						} else if place == 1 {
 							bowler.Name = data
-						}else if place == 2 {
+						} else if place == 2 {
 							bowler.City = data
-						}else if place == 3 {
+						} else if place == 3 {
 							bowler.USBC = data
 						}
 
@@ -357,14 +357,14 @@ func IGBOHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(d)
 }
 
-func checkTable3(r *html.Tokenizer) []Event{
+func checkTable3(r *html.Tokenizer) []Event {
 
 	counter := 0
 	lis := make([]string, 0)
 	place := 0
 	events := []Event{}
 	event := Event{}
-	newEvent:= false
+	newEvent := false
 
 	for {
 		d := r.Next()
@@ -398,13 +398,13 @@ func checkTable3(r *html.Tokenizer) []Event{
 					if place == 0 {
 						event.Date = data
 						newEvent = false
-					}else if place == 3 {
+					} else if place == 3 {
 						in, _ := strconv.Atoi(data)
 						event.Series = in
-					}else if place == 4 {
+					} else if place == 4 {
 						in, _ := strconv.Atoi(data)
 						event.Games = in
-					}else if place == 5 {
+					} else if place == 5 {
 						in, _ := strconv.Atoi(data)
 						event.Average = in
 						events = append(events, event)
@@ -412,7 +412,7 @@ func checkTable3(r *html.Tokenizer) []Event{
 						place = 0
 						newEvent = true
 					}
-					if !newEvent{
+					if !newEvent {
 						place += 1
 					}
 				}
@@ -462,13 +462,13 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", UsageHandler)
 	r.HandleFunc("/usbc/id", IDHandler)
-	r.HandleFunc( "/usbc/averages", AverageHandler)
-	r.HandleFunc( "/usbc/rerates", RerateHandler)
-	r.HandleFunc( "/usbc/leagues", LeagueHandler)
-	r.HandleFunc( "/usbc/memberships", MembershipHandler)
-	r.HandleFunc( "/usbc/achievements", AchievementHandler)
-	r.HandleFunc( "/usbc/tournaments", TournamentHandler)
-	r.HandleFunc( "/igbo/id", IGBOIDHandler)
-	r.HandleFunc( "/igbo/averages", IGBOHandler)
-	log.Fatal(http.ListenAndServe(":" + port, r))
+	r.HandleFunc("/usbc/averages", AverageHandler)
+	r.HandleFunc("/usbc/rerates", RerateHandler)
+	r.HandleFunc("/usbc/leagues", LeagueHandler)
+	r.HandleFunc("/usbc/memberships", MembershipHandler)
+	r.HandleFunc("/usbc/achievements", AchievementHandler)
+	r.HandleFunc("/usbc/tournaments", TournamentHandler)
+	r.HandleFunc("/igbo/id", IGBOIDHandler)
+	r.HandleFunc("/igbo/averages", IGBOHandler)
+	log.Fatal(http.ListenAndServe(":"+port, r))
 }
