@@ -189,5 +189,5 @@ func main() {
 	r.HandleFunc("/usbc/tournaments", TournamentHandler)
 	//r.HandleFunc("/igbo/id", IGBOIDHandler)
 	//r.HandleFunc("/igbo/averages", IGBOHandler)
-	log.Fatal(http.ListenAndServe("136.52.11.194:"+port, r))
+	log.Fatal(http.ListenAndServe("192.168.1.171:"+port, r))
 }
