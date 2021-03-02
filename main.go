@@ -172,12 +172,6 @@ func TournamentHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8000"
-	}
-
 	r := mux.NewRouter()
 	r.HandleFunc("/", UsageHandler)
 	r.HandleFunc("/usbc/id", IDHandler)
@@ -189,5 +183,5 @@ func main() {
 	r.HandleFunc("/usbc/tournaments", TournamentHandler)
 	//r.HandleFunc("/igbo/id", IGBOIDHandler)
 	//r.HandleFunc("/igbo/averages", IGBOHandler)
-	log.Fatal(http.ListenAndServe("192.168.1.171:"+port, r))
+	log.Fatal(http.ListenAndServe("192.168.1.171", r))
 }
