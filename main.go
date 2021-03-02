@@ -2,10 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"html/template"
 
 	"github.com/gorilla/mux"
 )
@@ -24,6 +26,21 @@ var (
 	//IGBO_AVERAGES = "/tournaments/get-igbo-tournament-tad-average/"
 	//IGBO_ID       = "/tournaments/igbots-id-lookup/"
 )
+
+type Results struct {
+	Profiles []USBCProfile `json:"results"`
+}
+
+type USBCProfile struct {
+	Prefix string `json:"prefix"`
+	Suffix string `json:"suffix"`
+	First string `json:"first"`
+	Init string `json:"init"`
+	Last string `json:"last"`
+	Gender string `json:"gender"`
+	PBA bool `json:"pba"`
+	Association string `json:"assn"`
+}
 
 /*type IGBO struct {
 	ID   string
@@ -96,7 +113,27 @@ func queryForUSBC(url string, r *http.Request) []byte {
 func IDHandler(w http.ResponseWriter, r *http.Request) {
 	body := queryForUSBC(USBC_SITE+ID, r)
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(body)
+
+	var results Results
+	err := json.Unmarshal(body, &results)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	profile := results.Profiles[0]
+
+	f, err := os.Create("profiles/" + profile.Prefix + profile.Suffix)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	t, err := template.ParseFiles("templates/profile.html")
+	if err != nil {
+		panic(err)
+	}
+
+	err = t.Execute(f, profile)
+	http.ServeFile(w, r, "profiles/" + profile.Prefix + profile.Suffix)
 }
 
 func AverageHandler(w http.ResponseWriter, r *http.Request) {
