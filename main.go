@@ -175,7 +175,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "6970"
+		port = "8000"
 	}
 
 	r := mux.NewRouter()
