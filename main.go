@@ -70,6 +70,7 @@ type Bowler struct {
 
 func UsageHandler(w http.ResponseWriter, r *http.Request) {
 
+	fmt.Println("HEHEHEHEH REQUEST COMING THROUGH!!!!!!!!")
 	data := map[string]string{
 		"/usbc/id":           "Get USBC ID: pass in prefix/suffix/size",
 		"/usbc/averages":     "Get USBC Averages: pass in prefix/suffix/size",
